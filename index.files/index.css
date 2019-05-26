@@ -12,7 +12,7 @@ html {
 	display: flex;
 	height: 100vh;
 	justify-content: center;
-	padding-bottom: 2em;
+	padding: 0 1em 3em 1em;
 }
 
 body {
