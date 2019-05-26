@@ -1,0 +1,61 @@
+* {
+	animation: unset !important;
+	-webkit-animation: unset !important;
+	box-sizing: border-box;
+	transition: unset !important;
+}
+
+html {
+	align-items: center;
+	background-color: #444;
+	color: #aaa;
+	display: flex;
+	height: 100vh;
+	justify-content: center;
+	padding-bottom: 2em;
+}
+
+body {
+	flex: 1;
+	max-width: 30em;
+	text-align: center;
+}
+
+form > p:first-child {
+	align-items: flex-end;
+	display: flex;
+	justify-content: space-between;
+}
+
+form > p:first-child > span#wordLabel {
+	font-size: 350%;
+}
+
+form > p:first-child > span#scoreOutput {
+	font-size: 250%;
+}
+
+form input[type="text"] {
+	background-color: rgba(255,255,255,0.25) !important;
+	border-width: 2px;
+	color: #aaa;
+	font-size: 200%;
+	text-align: center;
+}
+
+form input[type="button"] {
+	font-size: 250%;
+}
+
+.swal-modal {
+	background-color: #444 !important;
+}
+
+.swal-text {
+	color: #aaa !important;
+}
+
+.swal-button--cancel {
+	background-color: rgba(255,255,255,0.125) !important;
+	color: #ccc !important;
+}
