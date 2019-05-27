@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja-JP">
 <head>
-  <title>訓読み　練習儀</title>
+  <title>単語練習儀</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://unpkg.com/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
@@ -9,13 +9,18 @@
   <link rel="stylesheet" href="index.files/index.css" />
 </head>
 <body>
+  <select onchange="handleSelectChange()" lang="en">
+    <option value="kunyomi">Kunyomi</option>
+    <option value="hanjaeo">Hanjaeo</option>
+  </select>
+
   <form onsubmit="return false">
     <p>
       <span id="wordLabel"></span>
-      <span id="scoreOutput"></span>
+      <span id="scoreOutput" lang="ja-JP"></span>
     </p>
-    <p><input type="text" class="swal-content__input" id="yomikataInput" oninput="handleYomikataInput()"/></p>
-    <p><input type="button" class="swal-button swal-button--cancel" value="スキップ" onclick="handleSkip()"/></p>
+    <p><input type="text" class="swal-content__input" id="yomikataInput"/></p>
+    <p><input type="button" class="swal-button swal-button--cancel" value="スキップ" id="skipButton" lang="ja-JP"/></p>
   </form>
 </body>
 </html>

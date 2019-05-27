@@ -21,6 +21,19 @@ body {
 	text-align: center;
 }
 
+select {
+	border: 0;
+	left: 0;
+	margin: 8px 6px;
+	position: absolute;
+	top: 0;
+}
+
+select, select > option {
+	background-color: #737373;
+	color: #eee;
+}
+
 form > p:first-child {
 	align-items: flex-end;
 	display: flex;
@@ -47,12 +60,13 @@ form input[type="button"] {
 	font-size: 250%;
 }
 
-.swal-modal {
+div.swal-modal {
 	background-color: #444 !important;
 }
 
-.swal-text {
+div.swal-modal > div.swal-text {
 	color: #aaa !important;
+	font-size: large;
 }
 
 .swal-button--cancel {
