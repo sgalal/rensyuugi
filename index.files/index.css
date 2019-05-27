@@ -35,8 +35,9 @@ select, select > option {
 }
 
 form > p:first-child {
-	align-items: flex-end;
+	align-items: flex-start;
 	display: flex;
+	flex-wrap: wrap-reverse;
 	justify-content: space-between;
 }
 
@@ -45,7 +46,7 @@ form > p:first-child > span#wordLabel {
 }
 
 form > p:first-child > span#scoreOutput {
-	font-size: 250%;
+	font-size: 175%;
 }
 
 form input[type="text"] {
