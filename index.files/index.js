@@ -51,6 +51,16 @@ const handleSelectChange = async () => {
 		const wordTransformer = answer => answer;
 		yomikataInput.addEventListener('input', handleYomikataInput(wordTransformer));
 		skipButton.addEventListener('click', handleSkip);
+	} else if (selectValue == 'cantonese') {
+		wordCount = 0, correctCount = 0;
+
+		await loadedDict('index.files/cantonese/data.json');
+		document.querySelector('form').lang = 'zh-Hant';
+		refreshBoard();
+
+		const wordTransformer = answer => answer.replace(/[1-6]/g, '');
+		yomikataInput.addEventListener('input', handleYomikataInput(wordTransformer));
+		skipButton.addEventListener('click', handleSkip);
 	}
 }
 
