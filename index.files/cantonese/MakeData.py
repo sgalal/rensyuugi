@@ -8,67 +8,49 @@ import json
 import sqlite3
 import urllib.request
 
-source_url = 'https://github.com/sgalal/lexi_can_crawler/releases/download/v1.0/data.json'
+source_url = 'https://github.com/sgalal/lexi_can_crawler/releases/download/v1.1/data.json'
 source = urllib.request.urlopen(source_url).read().decode('utf-8')
 data = json.loads(source)
 
-d = defaultdict(list)
+# Single characters
 
-# Processing
+d = defaultdict(set)
 
 for x in data:
-	character = x['character']
-	romanization = x['romanization']
-	d[character].append(romanization)  # Dump single characters
+	ch = x['ch']
+	romanization = x['initial'] + x['rhyme'] + x['tone']
+	d[ch].add(romanization)  
 
-# Calculate words
+# Words
 
-with closing(sqlite3.connect(':memory:')) as conn:
-	cur = conn.cursor()
+e = defaultdict(set)
 
-	cur.execute('''
-		CREATE TABLE 'characters'
-		( 'id'           INTEGER PRIMARY KEY
-		, 'character'    TEXT NOT NULL
-		, 'romanization' TEXT NOT NULL
-		);
-		''')
+for x in data:
+	ch = x['ch']
+	romanization = x['initial'] + x['rhyme'] + x['tone']
+	words = x['words']
 
-	cur.executemany('INSERT INTO characters VALUES (?, ?, ?)', ((i, x['character'], x['romanization']) for i, x in enumerate(data)))
+	def handle_current_char(current_char):
+		if current_char == ch:
+			return romanization
+		elif len(d[current_char]) == 1:
+			return next(iter(d[current_char]))
+		else:
+			return None
 
-	conn.commit()
+	def handle_word(word):
+		res = [handle_current_char(x) for x in word]
+		if all(x is not None for x in res):
+			return ' '.join(res)
+		else:
+			return None
 
-	def get_unique_pron(cur, ch):
-		'''
-		Return the unique romanization if it is unique,
-		otherwise return None.
-		'''
-		try:
-			pron_count = next(cur.execute(f"SELECT COUNT(*) FROM characters WHERE character = '{ch}' GROUP BY character;"))[0] == 1
-		except StopIteration:
-			pron_count = 0
+	for word in words:
+		res = handle_word(word)
+		if res is not None:
+			e[word].add(res)
 
-		if pron_count == 1:  # Has unique pronunciation
-			return next(cur.execute(f"SELECT romanization FROM characters WHERE character = '{ch}';"))[0]
-
-	for i, x in enumerate(data):
-		romanization = x['romanization']
-		character = x['character']
-
-		for word in x['words']:
-			def process(ch):
-				if ch == character:
-					return romanization
-				else:
-					return get_unique_pron(cur, ch)
-
-			res = [process(ch) for ch in word]
-
-			if all(x is not None for x in res):
-				pron = ' '.join(res)
-
-				if pron not in d[word]:
-					d[word].append(pron)  # Dump words
+g = {k: sorted(v) for k, v in {**d, **e}.items()}
 
 with open('data.json', 'w') as fout:
-	print(json.dumps(d, ensure_ascii=False, sort_keys=True).replace('], ', '],\n'), file=fout)
+	print(json.dumps(g, ensure_ascii=False, sort_keys=True).replace('], ', '],\n'), file=fout)
