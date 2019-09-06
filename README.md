@@ -6,7 +6,7 @@ Rensyuugi is an extensible word reciting framework that supports multiple langua
 
 It now supports Japanese [_Kun'yomi_](https://en.wikipedia.org/wiki/Kanji#Kun'yomi_(native_reading)), Korean [Hanja-eo](https://en.wikipedia.org/wiki/Sino-Korean_vocabulary) and [Cantonese](https://en.wikipedia.org/wiki/Cantonese).
 
-See https://sgalal.github.io/rensyuugi/
+The site is published on <https://sgal.self.sugina.cc/rensyuugi/>.
 
 ## License
 
