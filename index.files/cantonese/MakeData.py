@@ -3,46 +3,32 @@
 
 from collections import defaultdict
 import json
+import re
+import sys
 import urllib.request
 
-source_url = 'https://github.com/sgalal/lexi_can_crawler/releases/download/v1.1/data.json'
-source = urllib.request.urlopen(source_url).read().decode('utf-8')
-data = json.loads(source)
+def skip_header(response):
+    it = iter(response.readlines())
+    while True:
+        if next(it).decode('utf-8') == '...\n':
+            break
+    next(it)
+    for line in it:
+        yield line.decode('utf-8')
 
-# Single characters
+source_url = 'https://raw.githubusercontent.com/sgalal/rime-cantonese/533b82e2104c315409453f87f38aafd33f97ce28/jyut6ping3.dict.yaml'
+d = defaultdict(list)
+pattern = re.compile(r'^([^\t\n]+)\t([^\t\n]+)')
 
-d1 = defaultdict(set)
-for x in data:
-	ch = x['ch']
-	romanization = x['initial'] + x['rhyme'] + x['tone']
-	d1[ch].add(romanization)  
+for line in skip_header(urllib.request.urlopen(source_url)):
+    match = pattern.match(line)
+    try:
+        word = match[1]
+        yomikata = match[2]
+        if len(word) > 1:
+            d[word].append(yomikata)
+    except TypeError:
+        print(line, file=sys.stderr)
 
-# Words
-
-d2 = defaultdict(set)
-for x in data:
-	ch = x['ch']
-	romanization = x['initial'] + x['rhyme'] + x['tone']
-	words = x['words']
-
-	def handle_current_char(current_char):
-		if current_char == ch:
-			return romanization
-		elif len(d1[current_char]) == 1:  # Only one pronunciation
-			return next(iter(d1[current_char]))
-
-	def handle_word(word):
-		res = [handle_current_char(x) for x in word]
-		if all(res):
-			return ' '.join(res)
-
-	for word in words:
-		res = handle_word(word)
-		if res is not None:
-			d2[word].add(res)
-
-# Merge
-
-d_merged = {k: sorted(v) for k, v in {**d1, **d2}.items()}
 with open('data.json', 'w') as fout:
-	print(json.dumps(d_merged, ensure_ascii=False, sort_keys=True).replace('], ', '],\n'), file=fout)
+    print(json.dumps(d, ensure_ascii=False, sort_keys=True).replace('], ', '],\n'), file=fout)

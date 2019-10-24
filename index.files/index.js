@@ -58,7 +58,7 @@ const handleSelectChange = async () => {
 		document.querySelector('form').lang = 'zh-Hant';
 		refreshBoard();
 
-		const wordTransformer = answer => answer.replace(/[1-6]/g, '');
+		const wordTransformer = answer => answer;
 		yomikataInput.addEventListener('input', handleYomikataInput(wordTransformer));
 		skipButton.addEventListener('click', handleSkip);
 	}
