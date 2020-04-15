@@ -3,9 +3,12 @@
 
 from collections import defaultdict
 import json
+import os
 import re
 import sys
 import urllib.request
+
+here = os.path.dirname(os.path.abspath(__file__))
 
 def skip_header(response):
     it = iter(response.readlines())
@@ -14,9 +17,11 @@ def skip_header(response):
             break
     next(it)
     for line in it:
-        yield line.decode('utf-8')
+        str = line.decode('utf-8')
+        if str and str[0] != '#':
+            yield str
 
-source_url = 'https://raw.githubusercontent.com/sgalal/rime-cantonese/533b82e2104c315409453f87f38aafd33f97ce28/jyut6ping3.dict.yaml'
+source_url = 'https://raw.githubusercontent.com/rime/rime-cantonese/15b9bb92187653ef9ae6439f15b83deb987608c0/jyut6ping3.dict.yaml'
 d = defaultdict(list)
 pattern = re.compile(r'^([^\t\n]+)\t([^\t\n]+)')
 
@@ -30,5 +35,5 @@ for line in skip_header(urllib.request.urlopen(source_url)):
     except TypeError:
         print(line, file=sys.stderr)
 
-with open('data.json', 'w') as fout:
+with open(os.path.join(here, 'data.json'), 'w') as fout:
     print(json.dumps(d, ensure_ascii=False, sort_keys=True).replace('], ', '],\n'), file=fout)
