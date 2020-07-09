@@ -21,7 +21,7 @@ def skip_header(response):
         if str and str[0] != '#':
             yield str
 
-source_url = 'https://raw.githubusercontent.com/rime/rime-cantonese/15b9bb92187653ef9ae6439f15b83deb987608c0/jyut6ping3.dict.yaml'
+source_url = 'https://raw.githubusercontent.com/rime/rime-cantonese/a1670a6964ed887dc4f268615916c21e98b2309d/jyut6ping3.dict.yaml'
 d = defaultdict(list)
 pattern = re.compile(r'^([^\t\n]+)\t([^\t\n]+)')
 
